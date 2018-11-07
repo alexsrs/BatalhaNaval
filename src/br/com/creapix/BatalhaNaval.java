@@ -37,8 +37,7 @@ public class BatalhaNaval {
 		nomeJogador2 = "Computador";
 	}
 
-	private static void calcularQuantidadeMaximaDeNaviosNoJogo() {
-		// TODO Auto-generated method stub
+	public static void calcularQuantidadeMaximaDeNaviosNoJogo() {
 		limiteMaximoDeNavios = tamanhoX * tamanhoY / 3;
 	}
 
@@ -152,7 +151,6 @@ public class BatalhaNaval {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		/*
 		 * Tabuleiros 1 - Jogador 2 - Computador / Outro Jogador
 		 */
@@ -163,8 +161,48 @@ public class BatalhaNaval {
 		obterQuantidadeDeNavios();
 		inserirNaviosNosTabuleiros();
 		exibirTabuleiroDosJogadores();
+		
+		acaoDoJogador(); 
+		
+		
 
 		input.close();
+	}
+
+	public static void acaoDoJogador() {
+		System.out.println("Digite a posição do seu tiro ('LetraNumeros' ex. A1, E23):  ");
+		String tiroDoJogador = input.next();
+		int quantidadeDeNumeros = (tamanhoY >= 10) ? 2 : 1;
+		String expressaoDeVerificacao = "^[A-Za-z] {1} [0-9] {"+ quantidadeDeNumeros + "}$";
+		
+		
+		//Verificações
+		if (tiroDoJogador.matches(expressaoDeVerificacao)) {
+			String tiro = tiroDoJogador.toLowerCase();
+			int posicaoX = tiro.charAt(0) - 97;
+			
+			int posicaoY = Integer.parseInt(tiro.substring(1)) - 1;
+			
+			if (verificarPosicaoInseridaPeloJogador(posicaoX, posicaoY)) {
+				System.out.println("OK - Disparando");
+			}
+			
+		} else {
+			System.out.println("Coordenadas inválidas");
+		}
+	}
+
+	public static boolean verificarPosicaoInseridaPeloJogador(int posicaoX, int posicaoY) {
+		boolean retorno = true;
+		if (posicaoX > tamanhoX - 1) {
+			retorno = false;
+			System.out.println("A posição das letras não pode ser maior que "+ (char) tamanhoX + 64);
+		}
+		if (posicaoY > tamanhoY) {
+			retorno = false;
+			System.out.println("A posição numérica mão pode ser maior que " + tamanhoY);
+		}
+		return retorno;
 	}
 
 }
