@@ -160,45 +160,81 @@ public class BatalhaNaval {
 		iniciandoTamanhoDosTabuleiros();
 		obterQuantidadeDeNavios();
 		inserirNaviosNosTabuleiros();
+		boolean jogoAtivo = true;
+		
+		do {
 		exibirTabuleiroDosJogadores();
 		
-		acaoDoJogador(); 
-		
-		
+			if (acaoDoJogador()) { 
+			
+			// Validacao do fim do jogo
+			// acao do computador
+			// validação do fim do jogo
+				
+			}
+			
+			// Validacao do fim do jogo
+			// acao do computador
+			// validação do fim do jogo
+			
+			
+		} while (jogoAtivo);
 
 		input.close();
 	}
 
-	public static void acaoDoJogador() {
-		System.out.println("Digite a posição do seu tiro ('LetraNumeros' ex. A1, E23):  ");
-		String tiroDoJogador = input.next();
-		int quantidadeDeNumeros = (tamanhoY >= 10) ? 2 : 1;
-		String expressaoDeVerificacao = "^[A-Za-z] {1} [0-9] {"+ quantidadeDeNumeros + "}$";
-		
+	public static boolean acaoDoJogador() {
+		boolean acaoValida = true;
+		String tiroDoJogador = receberValorDigitadoPeloJogador();
 		
 		//Verificações
-		if (tiroDoJogador.matches(expressaoDeVerificacao)) {
-			String tiro = tiroDoJogador.toLowerCase();
-			int posicaoX = tiro.charAt(0) - 97;
+		if (validarTiroDoJogador(tiroDoJogador)) {
 			
-			int posicaoY = Integer.parseInt(tiro.substring(1)) - 1;
+			int [] posicoes = retornarPosicoesDigitadasPeloJogador(tiroDoJogador);
 			
-			if (verificarPosicaoInseridaPeloJogador(posicaoX, posicaoY)) {
+			
+			if (validarPosicoesInseridasPeloJogador(posicoes)) {
 				System.out.println("OK - Disparando");
+			} else {
+				acaoValida = false;
 			}
 			
 		} else {
 			System.out.println("Coordenadas inválidas");
+			acaoValida = false;
 		}
+		return acaoValida;
 	}
 
-	public static boolean verificarPosicaoInseridaPeloJogador(int posicaoX, int posicaoY) {
+	public static int[] retornarPosicoesDigitadasPeloJogador(String tiroDoJogador) {
+		String tiro = tiroDoJogador.toLowerCase();
+		int [] retorno = new int[2];
+		retorno[0] = tiro.charAt(0) - 97;
+		retorno[1] = Integer.parseInt(tiro.substring(1)) - 1;
+		
+		
+		return retorno;
+	}
+
+	public static boolean validarTiroDoJogador(String tiroDoJogador) {
+		int quantidadeDeNumeros = (tamanhoY >= 10) ? 2 : 1;
+		String expressaoDeVerificacao = "^[A-Za-z] {1} [0-9] {"+ quantidadeDeNumeros + "}$";
+		return tiroDoJogador.matches(expressaoDeVerificacao);
+	}
+
+	public static String receberValorDigitadoPeloJogador() {
+		System.out.println("Digite a posição do seu tiro ('LetraNumeros' ex. A1, E23):  ");
+		String tiroDoJogador = input.next();
+		return tiroDoJogador;
+	}
+
+	public static boolean validarPosicoesInseridasPeloJogador(int [] posicoes) {
 		boolean retorno = true;
-		if (posicaoX > tamanhoX - 1) {
+		if (posicoes[0] > tamanhoX - 1) {
 			retorno = false;
 			System.out.println("A posição das letras não pode ser maior que "+ (char) tamanhoX + 64);
 		}
-		if (posicaoY > tamanhoY) {
+		if (posicoes[1] > tamanhoY) {
 			retorno = false;
 			System.out.println("A posição numérica mão pode ser maior que " + tamanhoY);
 		}
